@@ -1,0 +1,10 @@
+{
+  "name": "Calorie Tracker",
+  "short_name": "Calorie Tracker",
+  "description": "Track daily meals, calories, and protein.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f5f2eb",
+  "theme_color": "#2d6a4f",
+  "orientation": "portrait-primary"
+}
