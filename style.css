@@ -3,8 +3,8 @@
   --card: #fffef9;
   --text: #2d2a26;
   --text-muted: #6b6560;
-  --accent: #2d6a4f;
-  --accent-light: #40916c;
+  --accent: #01434b;
+  --accent-light: #02606d;
   --progress-bg: #e8e4dc;
   --border: #e0dcd2;
   --shadow: 0 2px 12px rgba(45, 42, 38, 0.06);
@@ -112,7 +112,7 @@ input[type="date"]:focus,
 .add-section input:focus {
   outline: none;
   border-color: var(--accent);
-  box-shadow: 0 0 0 2px rgba(45, 106, 79, 0.15);
+  box-shadow: 0 0 0 2px rgba(1, 67, 75, 0.2);
 }
 
 .summary .summary-grid {
