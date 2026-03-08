@@ -223,7 +223,6 @@ document.getElementById("add-form").addEventListener("submit", (e) => {
   nameInput.value = "";
   calInput.value = "";
   proteinInput.value = "";
-  applyLastEntry();
   renderEntries();
 });
 
