@@ -11,6 +11,8 @@ const MEAL_LABELS = {
 
 const MEAL_ORDER = ["breakfast", "lunch", "dinner", "snacks"];
 
+let editingEntryIndex = null;
+
 function dateToKey(date) {
   const d = date instanceof Date ? date : new Date(date);
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
@@ -154,12 +156,19 @@ function renderEntries() {
           <span class="entry-meta">${proteinText}${entry.calories || 0} cal</span>
         </div>
         <span class="entry-calories">${entry.calories || 0} cal</span>
-        <button type="button" class="delete-btn" data-index="${globalIndex}" aria-label="Remove entry">×</button>
+        <div class="entry-actions">
+          <button type="button" class="edit-btn" data-index="${globalIndex}" aria-label="Edit entry">Edit</button>
+          <button type="button" class="delete-btn" data-index="${globalIndex}" aria-label="Remove entry">×</button>
+        </div>
       `;
+      li.querySelector(".edit-btn").addEventListener("click", () => {
+        setEditMode(dateKey, globalIndex);
+      });
       li.querySelector(".delete-btn").addEventListener("click", () => {
         const arr = getEntriesForDate(dateKey);
         arr.splice(globalIndex, 1);
         setEntriesForDate(dateKey, arr);
+        clearEditMode();
         renderEntries();
       });
       ul.appendChild(li);
@@ -182,6 +191,7 @@ function initDatePicker() {
 
   input.addEventListener("change", () => {
     dayEl.textContent = formatDayOfWeek(getSelectedDate());
+    clearEditMode();
     renderEntries();
   });
 }
@@ -201,6 +211,31 @@ function applyLastEntry() {
   }
 }
 
+function setEditMode(dateKey, index) {
+  const entries = getEntriesForDate(dateKey);
+  const entry = entries[index];
+  if (!entry) return;
+  editingEntryIndex = index;
+  document.getElementById("food-name").value = entry.name || "";
+  document.getElementById("food-calories").value = entry.calories != null ? String(entry.calories) : "";
+  document.getElementById("food-protein").value = entry.protein != null ? String(entry.protein) : "";
+  const radio = document.querySelector(`input[name="meal-type"][value="${entry.mealType || "snacks"}"]`);
+  if (radio) radio.checked = true;
+  document.getElementById("submit-btn").textContent = "Save";
+  document.getElementById("cancel-edit-btn").style.display = "block";
+}
+
+function clearEditMode() {
+  editingEntryIndex = null;
+  document.getElementById("food-name").value = "";
+  document.getElementById("food-calories").value = "";
+  document.getElementById("food-protein").value = "";
+  const snacksRadio = document.querySelector('input[name="meal-type"][value="snacks"]');
+  if (snacksRadio) snacksRadio.checked = true;
+  document.getElementById("submit-btn").textContent = "Add";
+  document.getElementById("cancel-edit-btn").style.display = "none";
+}
+
 document.getElementById("add-form").addEventListener("submit", (e) => {
   e.preventDefault();
   const nameInput = document.getElementById("food-name");
@@ -215,15 +250,25 @@ document.getElementById("add-form").addEventListener("submit", (e) => {
 
   const dateKey = getSelectedDate();
   const entries = getEntriesForDate(dateKey);
-  entries.push({ name, calories, protein, mealType });
-  setEntriesForDate(dateKey, entries);
 
-  saveLastEntry({ name, calories, protein, mealType });
+  if (editingEntryIndex !== null) {
+    entries[editingEntryIndex] = { name, calories, protein, mealType };
+    setEntriesForDate(dateKey, entries);
+    clearEditMode();
+  } else {
+    entries.push({ name, calories, protein, mealType });
+    setEntriesForDate(dateKey, entries);
+    saveLastEntry({ name, calories, protein, mealType });
+    nameInput.value = "";
+    calInput.value = "";
+    proteinInput.value = "";
+  }
 
-  nameInput.value = "";
-  calInput.value = "";
-  proteinInput.value = "";
   renderEntries();
+});
+
+document.getElementById("cancel-edit-btn").addEventListener("click", () => {
+  clearEditMode();
 });
 
 loadGoal();

@@ -322,6 +322,58 @@ input[type="date"]:focus,
   opacity: 1;
 }
 
+.edit-btn {
+  min-width: 36px;
+  min-height: var(--touch);
+  padding: 0 0.5rem;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 500;
+  opacity: 0.8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.edit-btn:hover {
+  color: var(--accent);
+  opacity: 1;
+}
+
+.entry-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+#add-form .cancel-btn {
+  min-height: var(--touch);
+  padding: 0.75rem 1rem;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  background: var(--progress-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+#add-form .cancel-btn:hover {
+  background: var(--border);
+  color: var(--text);
+}
+
+#add-form .form-actions {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
 .empty-state {
   margin: 0;
   padding: 1rem 0;
